@@ -1,7 +1,8 @@
 from sentence_transformers import SentenceTransformer, util
 
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
 def group_by_meaning(sentences):
-	model = SentenceTransformer("all-MiniLM-L6-v2")
 	embeddings = model.encode(sentences, normalize_embeddings=True)
 	similarities = model.similarity(embeddings, embeddings)
 	print(similarities)
