@@ -1,7 +1,15 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import AgglomerativeClustering
+from flask import Flask
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
+app = Flask(__name__)
+sessions = {}
+join_code = "1234"
+
+@app.route("/")
+def index():
+	return app.send_static_file("join.html")
 
 def group_by_meaning(sentences, threshold=0.25):
 	embeddings = model.encode(sentences, normalize_embeddings=True)
@@ -26,3 +34,4 @@ if __name__ == "__main__":
 	]
 	sentence_groups = group_by_meaning(sentence_examples)
 	print(sentence_groups)
+	app.run()
