@@ -1,14 +1,22 @@
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer
+from sklearn.cluster import AgglomerativeClustering
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-def group_by_meaning(sentences):
+def group_by_meaning(sentences, threshold=0.25):
 	embeddings = model.encode(sentences, normalize_embeddings=True)
-	similarities = model.similarity(embeddings, embeddings)
-	print(similarities)
-	print(similarities.mean())
-	print(similarities.std())
-	
+	labels = AgglomerativeClustering(
+		n_clusters=None,
+		distance_threshold=threshold,
+		metric="cosine",
+		linkage="average"
+	).fit_predict(embeddings)
+	grouped_sentences = {}
+	for sentence, label in zip(sentences, labels):
+		if label not in grouped_sentences:
+			grouped_sentences[label] = []
+		grouped_sentences[label].append(sentence)
+	return list(grouped_sentences.values())
 
 if __name__ == "__main__":
 	sentence_examples = [
@@ -17,3 +25,4 @@ if __name__ == "__main__":
 		"Test this.",
 	]
 	sentence_groups = group_by_meaning(sentence_examples)
+	print(sentence_groups)
