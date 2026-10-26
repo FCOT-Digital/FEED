@@ -21,6 +21,17 @@ def join_session():
 		return {"session_id": session_id}
 	return {"error": "Invalid code"}, 400
 
+@app.route("/api/comment", methods=["POST"])
+def add_comment():
+	data = request.get_json()
+	session_id = data.get("session_id")
+	comment = data.get("comment")
+	if session_id in sessions:
+		sessions[session_id] = comment
+		print(sessions)
+		return {"message": "Comment added"}
+	return {"error": "Invalid session ID"}, 400
+
 def group_by_meaning(sentences, threshold=0.25):
 	embeddings = model.encode(sentences, normalize_embeddings=True)
 	labels = AgglomerativeClustering(

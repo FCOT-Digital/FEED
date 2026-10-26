@@ -9,5 +9,9 @@
 		<input v-model="joinCode" placeholder="Enter join code" />
 		<button type="submit">Join</button>
 	</form>
+	<form v-on:submit.prevent="sendComment" v-if="sessionId">
+		<input v-model="comment" placeholder="Enter comment" />
+		<button type="submit">Send</button>
+	</form>
 </body>
 </html>

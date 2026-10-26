@@ -3,6 +3,7 @@ Vue.createApp({
 	return {
 		joinCode: '',
 		sessionId: null,
+		comment: '',
 	}
   },
   methods: {
@@ -20,6 +21,19 @@ Vue.createApp({
 		if (data.session_id) {
 			this.sessionId = data.session_id;
 		}
-	}
+	},
+	async sendComment() {
+		await fetch('/api/comment', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				session_id: this.sessionId,
+				comment: this.comment
+			})
+		});
+		this.comment = '';
+	},
   }
 }).mount('#app')
