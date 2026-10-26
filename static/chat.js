@@ -31,5 +31,14 @@ Vue.createApp({
 				this.comment = '';
 			}
 		},
-	}
+	},
+	created() {
+		this.events = new EventSource('/stream/comment');
+		this.events.onmessage = (event) => {
+			console.log(event.data);
+		};
+	},
+	unmounted() {
+		this.events.close();
+	},
 }).mount('#app')
