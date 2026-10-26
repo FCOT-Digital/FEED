@@ -12,25 +12,22 @@ join_code = "1234"
 def index():
 	return app.send_static_file("join.html")
 
-@app.route("/api/join", methods=["POST"])
-def join_session():
-	data = request.get_json()
-	if data.get("code") == join_code:
+@app.route("/api/participant", methods=["POST"])
+def create_participant():
+	given_code = request.get_data().decode('utf-8')
+	if given_code == join_code:
 		session_id = str(uuid4())
 		sessions[session_id] = None
-		return {"session_id": session_id}
-	return {"error": "Invalid code"}, 400
+		return session_id
+	return "Invalid join code", 400
 
-@app.route("/api/comment", methods=["POST"])
-def add_comment():
-	data = request.get_json()
-	session_id = data.get("session_id")
-	comment = data.get("comment")
+@app.route("/api/comment/<session_id>", methods=["PUT"])
+def add_comment(session_id):
+	comment = request.get_data().decode('utf-8')
 	if session_id in sessions:
 		sessions[session_id] = comment
-		print(sessions)
-		return {"message": "Comment added"}
-	return {"error": "Invalid session ID"}, 400
+		return session_id
+	return "Invalid session ID", 400
 
 def group_by_meaning(sentences, threshold=0.25):
 	embeddings = model.encode(sentences, normalize_embeddings=True)
