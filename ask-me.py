@@ -13,7 +13,7 @@ join_code = "1234"
 
 @app.route("/")
 def index():
-	return app.send_static_file("join.html")
+	return app.send_static_file("chat.html")
 
 @app.route("/api/participant", methods=["POST"])
 def create_participant():
