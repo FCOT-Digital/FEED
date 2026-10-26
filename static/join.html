@@ -5,6 +5,9 @@
 	<script src="/static/join.js" defer></script>
 </head>
 <body id="app">
-	<input v-model="joinCode" placeholder="Enter join code" />
+	<form v-on:submit.prevent="joinSession" v-if="!sessionId">
+		<input v-model="joinCode" placeholder="Enter join code" />
+		<button type="submit">Join</button>
+	</form>
 </body>
 </html>
