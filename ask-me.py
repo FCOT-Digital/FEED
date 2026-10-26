@@ -5,7 +5,7 @@ from uuid import uuid4
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 app = Flask(__name__)
-sessions = {}
+participants = {}
 join_code = "1234"
 
 @app.route("/")
@@ -16,18 +16,18 @@ def index():
 def create_participant():
 	given_code = request.get_data().decode('utf-8')
 	if given_code == join_code:
-		session_id = str(uuid4())
-		sessions[session_id] = None
-		return session_id
+		participant_id = str(uuid4())
+		participants[participant_id] = None
+		return participant_id
 	return "Invalid join code", 400
 
-@app.route("/api/comment/<session_id>", methods=["PUT"])
-def add_comment(session_id):
+@app.route("/api/comment/<participant_id>", methods=["PUT"])
+def update_comment(participant_id):
 	comment = request.get_data().decode('utf-8')
-	if session_id in sessions:
-		sessions[session_id] = comment
-		return session_id
-	return "Invalid session ID", 400
+	if participant_id in participants:
+		participants[participant_id] = comment
+		return participant_id
+	return "Invalid participant ID", 400
 
 def group_by_meaning(sentences, threshold=0.25):
 	embeddings = model.encode(sentences, normalize_embeddings=True)
