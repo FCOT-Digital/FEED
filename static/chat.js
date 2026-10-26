@@ -1,27 +1,37 @@
 Vue.createApp({
 	data() {
 		return {
-			joinCode: '',
-			sessionId: null,
+			commentStream: null,
+			sessionId: '',
+			participantId: null,
 			comment: '',
+			comments: [],
 		}
 	},
 	methods: {
 		async joinSession() {
-			const response = await fetch(
-				'/api/participant',
-				{
-					method: 'POST',
-					body: this.joinCode,
-				}
+			if (this.commentStream) {
+				this.commentStream.close();
+			}
+			this.comments = [];
+			this.comment = '';
+			this.commentStream = new EventSource(
+				'/stream/session/' + this.sessionId + '/comment'
 			);
-			if (response.ok) {
-				this.sessionId = await response.text();
+			this.commentStream.onmessage = (event) => {
+				console.log(event.data);
+			};
+			const participant = await fetch(
+				'/api/session/' + this.sessionId + '/participant',
+				{ method: 'POST' }
+			);
+			if (participant.ok) {
+				this.participantId = await participant.text();
 			}
 		},
 		async sendComment() {
 			const response = await fetch(
-				'/api/comment/' + this.sessionId,
+				'/api/session/' + this.sessionId + '/participant/' + this.participantId + '/comment',
 				{
 					method: 'PUT',
 					body: this.comment,
@@ -32,13 +42,9 @@ Vue.createApp({
 			}
 		},
 	},
-	created() {
-		this.events = new EventSource('/stream/comment');
-		this.events.onmessage = (event) => {
-			console.log(event.data);
-		};
-	},
 	unmounted() {
-		this.events.close();
+		if (this.commentStream) {
+			this.commentStream.close();
+		}
 	},
 }).mount('#app')

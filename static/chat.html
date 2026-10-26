@@ -5,11 +5,11 @@
 	<script src="/static/chat.js" defer></script>
 </head>
 <body id="app">
-	<form v-on:submit.prevent="joinSession" v-if="!sessionId">
-		<input v-model="joinCode" placeholder="Enter join code" />
+	<form v-on:submit.prevent="joinSession" v-if="!participantId">
+		<input v-model="sessionId" placeholder="Enter join code" />
 		<button type="submit">Join</button>
 	</form>
-	<form v-on:submit.prevent="sendComment" v-if="sessionId">
+	<form v-on:submit.prevent="sendComment" v-if="participantId">
 		<input v-model="comment" placeholder="Enter comment" />
 		<button type="submit">Send</button>
 	</form>

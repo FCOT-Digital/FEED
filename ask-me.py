@@ -15,32 +15,41 @@ join_code = "1234"
 def index():
 	return app.send_static_file("chat.html")
 
-@app.route("/api/participant", methods=["POST"])
-def create_participant():
-	given_code = request.get_data().decode('utf-8')
-	if given_code == join_code:
-		participant_id = str(uuid4())
-		participants[participant_id] = None
-		return participant_id
-	return "Invalid join code", 400
+@app.route(
+	"/api/session/<session_id>/participant",
+	methods=["POST"],
+)
+def create_participant(session_id):
+	if session_id != join_code:
+		return "Invalid join code", 400
+	participant_id = str(uuid4())
+	participants[participant_id] = None
+	return participant_id
 
-@app.route("/api/comment/<participant_id>", methods=["PUT"])
-def update_comment(participant_id):
+@app.route(
+	"/api/session/<session_id>/participant/<participant_id>/comment",
+	methods=["PUT"],
+)
+def update_comment(session_id, participant_id):
+	if session_id != join_code:
+		return "Invalid join code", 400
+	if participant_id not in participants:
+		return "Invalid participant ID", 400
 	comment = request.get_data().decode('utf-8')
-	if participant_id in participants:
-		participants[participant_id] = comment
-		raw_comments = [comment for comment in participants.values()]
-		meaningful_comments = [
-			comment for comment in raw_comments
-			if comment and len(comment.strip()) > 0
-		]
-		grouped_comments = group_by_meaning(meaningful_comments)
-		updated = datetime.now()
-		return participant_id
-	return "Invalid participant ID", 400
+	participants[participant_id] = comment
+	raw_comments = [comment for comment in participants.values()]
+	meaningful_comments = [
+		comment for comment in raw_comments
+		if comment and len(comment.strip()) > 0
+	]
+	grouped_comments = group_by_meaning(meaningful_comments)
+	updated = datetime.now()
+	return participant_id
 
-@app.route("/stream/comment", methods=["GET"])
-def stream_comments():
+@app.route("/stream/session/<session_id>/comment", methods=["GET"])
+def stream_comments(session_id):
+	if session_id != join_code:
+		return "Invalid join code", 400
 	def stream():
 		sent = None
 		while True:
