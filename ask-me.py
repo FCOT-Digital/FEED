@@ -48,7 +48,10 @@ def update_comment(session_id, participant_id):
 	updated = datetime.now()
 	return participant_id
 
-@app.route("/stream/session/<session_id>/comment", methods=["GET"])
+@app.route(
+	"/stream/session/<session_id>/comment",
+	methods=["GET"],
+)
 def stream_comments(session_id):
 	if session_id != join_code:
 		return "Invalid join code", 400
@@ -68,7 +71,7 @@ def stream_comments(session_id):
 def group_by_meaning(sentences, threshold=0.25):
 	if len(sentences) == 0:
 		return []
-	elif len(sentences) == 1:
+	if len(sentences) == 1:
 		return [sentences]
 	embeddings = model.encode(sentences, normalize_embeddings=True)
 	labels = AgglomerativeClustering(
