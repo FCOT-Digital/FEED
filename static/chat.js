@@ -30,13 +30,18 @@ Vue.createApp({
 			}
 		},
 		async sendComment() {
-			const response = await fetch(
-				'/api/session/' + this.sessionId + '/participant/' + this.participantId + '/comment',
-				{
-					method: 'PUT',
-					body: this.comment,
-				}
-			);
+			url = [
+				'api/session',
+				this.sessionId,
+				'participant',
+				this.participantId,
+				'comment',
+			].join('/');
+			payload = {
+				method: 'PUT',
+				body: this.comment,
+			}
+			const response = await fetch(url, payload);
 			if (response.ok) {
 				this.comment = '';
 			}
