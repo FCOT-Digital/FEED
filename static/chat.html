@@ -12,14 +12,14 @@
 		<input v-model="sessionId" placeholder="Enter join code" name="joinCode" />
 		<button type="submit">Join</button>
 	</form>
-	<div v-for="commentGroup in comments" class="comment-group">
-		<div v-for="comment in commentGroup">
-			{{ comment }}
-		</div>
-	</div>
 	<div v-if="participantId" class="comment-group">
 		<div>
 			Join the chat using the join code {{ sessionId }}.
+		</div>
+	</div>
+	<div v-for="commentGroup in comments" class="comment-group">
+		<div v-for="comment in commentGroup">
+			{{ comment }}
 		</div>
 	</div>
 	<form v-if="participantId" id="comment-form" v-on:submit.prevent="sendComment">
