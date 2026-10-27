@@ -1,19 +1,22 @@
 <html>
 <head>
 	<title>Ask Me</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand" rel="stylesheet">
+	<link href="/static/chat.css" rel="stylesheet">
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	<script src="/static/chat.js" defer></script>
 </head>
 <body id="app">
+	<form v-on:submit.prevent="joinSession" v-if="!participantId">
+		<input v-model="sessionId" placeholder="Enter join code" name="joinCode" />
+		<button type="submit">Join</button>
+	</form>
 	<div v-for="commentGroup in comments">
 		<span v-for="comment in commentGroup">
 			{{ comment }}
 		</span>
 	</div>
-	<form v-on:submit.prevent="joinSession" v-if="!participantId">
-		<input v-model="sessionId" placeholder="Enter join code" />
-		<button type="submit">Join</button>
-	</form>
 	<form v-on:submit.prevent="sendComment" v-if="participantId">
 		<input v-model="comment" placeholder="Enter comment" />
 		<button type="submit">Send</button>
