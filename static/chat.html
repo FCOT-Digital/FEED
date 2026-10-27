@@ -8,16 +8,16 @@
 	<script src="/static/chat.js" defer></script>
 </head>
 <body id="app">
-	<form v-on:submit.prevent="joinSession" v-if="!participantId">
+	<form v-on:submit.prevent="joinSession" v-if="!participantId" id="join">
 		<input v-model="sessionId" placeholder="Enter join code" name="joinCode" />
 		<button type="submit">Join</button>
 	</form>
-	<div v-for="commentGroup in comments">
-		<span v-for="comment in commentGroup">
+	<div v-for="commentGroup in comments" class="comment-group">
+		<div v-for="comment in commentGroup">
 			{{ comment }}
-		</span>
+		</div>
 	</div>
-	<form v-on:submit.prevent="sendComment" v-if="participantId">
+	<form v-on:submit.prevent="sendComment" v-if="participantId" id="comment">
 		<input v-model="comment" placeholder="Enter comment" />
 		<button type="submit">Send</button>
 	</form>

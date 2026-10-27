@@ -41,3 +41,17 @@ form {
 		text-align: center;
 	}
 }
+
+div.comment-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	margin: 0.6rem;
+	margin-right: 2.8rem;
+	padding: 0.6rem;
+	border-width: 2px;
+	border-style: solid;
+	border-color: var(--main);
+	border-radius: 1rem;
+	border-bottom-left-radius: 0;
+}
