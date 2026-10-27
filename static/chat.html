@@ -8,7 +8,7 @@
 	<script src="/static/chat.js" defer></script>
 </head>
 <body id="app">
-	<form v-on:submit.prevent="joinSession" v-if="!participantId" id="join">
+	<form v-if="!participantId" id="join-form" v-on:submit.prevent="joinSession">
 		<input v-model="sessionId" placeholder="Enter join code" name="joinCode" />
 		<button type="submit">Join</button>
 	</form>
@@ -17,7 +17,12 @@
 			{{ comment }}
 		</div>
 	</div>
-	<form v-on:submit.prevent="sendComment" v-if="participantId" id="comment">
+	<div v-if="participantId" class="comment-group">
+		<div>
+			Join the chat using the join code {{ sessionId }}.
+		</div>
+	</div>
+	<form v-if="participantId" id="comment-form" v-on:submit.prevent="sendComment">
 		<input v-model="comment" placeholder="Enter comment" />
 		<button type="submit">Send</button>
 	</form>
