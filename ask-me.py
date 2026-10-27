@@ -20,6 +20,7 @@ def index():
 	methods=["POST"],
 )
 def create_participant(session_id):
+	global participants
 	if session_id != join_code:
 		return "Invalid join code", 400
 	participant_id = str(uuid4())
@@ -31,6 +32,7 @@ def create_participant(session_id):
 	methods=["PUT"],
 )
 def update_comment(session_id, participant_id):
+	global grouped_comments, updated
 	if session_id != join_code:
 		return "Invalid join code", 400
 	if participant_id not in participants:
@@ -51,6 +53,7 @@ def stream_comments(session_id):
 	if session_id != join_code:
 		return "Invalid join code", 400
 	def stream():
+		global grouped_comments, updated
 		sent = None
 		while True:
 			if (
