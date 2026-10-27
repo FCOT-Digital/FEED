@@ -3,6 +3,7 @@ from sklearn.cluster import AgglomerativeClustering
 from flask import Flask, request, Response
 from uuid import uuid4
 from datetime import datetime
+import json
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 app = Flask(__name__)
@@ -65,7 +66,7 @@ def stream_comments(session_id):
 				(datetime.now() - sent).total_seconds() > 7
 			):
 				sent = datetime.now()
-				yield f"data: {grouped_comments}\n\n"
+				yield f"data: {json.dumps(grouped_comments)}\n\n"
 	return Response(stream(), mimetype='text/event-stream')
 
 def group_by_meaning(sentences, threshold=0.25):

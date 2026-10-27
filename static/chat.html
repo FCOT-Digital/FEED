@@ -5,6 +5,11 @@
 	<script src="/static/chat.js" defer></script>
 </head>
 <body id="app">
+	<div v-for="commentGroup in comments">
+		<span v-for="comment in commentGroup">
+			{{ comment }}
+		</span>
+	</div>
 	<form v-on:submit.prevent="joinSession" v-if="!participantId">
 		<input v-model="sessionId" placeholder="Enter join code" />
 		<button type="submit">Join</button>

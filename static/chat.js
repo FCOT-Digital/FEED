@@ -19,7 +19,7 @@ Vue.createApp({
 				'/stream/session/' + this.sessionId + '/comment'
 			);
 			this.commentStream.onmessage = (event) => {
-				console.log(event.data);
+				this.comments = JSON.parse(event.data);
 			};
 			const participant = await fetch(
 				'/api/session/' + this.sessionId + '/participant',
