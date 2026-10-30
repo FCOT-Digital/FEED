@@ -69,7 +69,7 @@ def stream_comments(session_id):
 				yield f"data: {json.dumps(grouped_comments)}\n\n"
 	return Response(stream(), mimetype='text/event-stream')
 
-def group_by_meaning(sentences, threshold=0.25):
+def group_by_meaning(sentences, threshold=0.6):
 	if len(sentences) == 0:
 		return []
 	if len(sentences) == 1:
@@ -90,10 +90,25 @@ def group_by_meaning(sentences, threshold=0.25):
 
 if __name__ == "__main__":
 	sentence_examples = [
-		"Hello World!",
-		"Hello everyone!",
-		"Test this.",
+		"How does the SDLC work when making a video game instead of normal software?",
+		"Can you go back to a previous stage in waterfall or do you have to restart?",
+		"Why do developers need to make documantation if the code already works?",
+		"How do you know when to move onto the next stage of development?",
+		"What happens if the client changes there requirements halfway through?",
+		"Is Scrum the same thing as agile or are they different?",
+		"What does maintanence mean in the SDLC?",
+		"Why would a company use waterfall instead of agile if agile is faster?",
+		"What is the diffrence between verification and validation?",
+		"How many stages are there in the software developement life cycle?",
+		"Is testing only done at the end or can you do it during development?",
+		"What happens in the planning stage of the SDLC?",
+		"Why cant developers just start coding straight away?",
+		"Whats the difference between waterfall and agile?",
+		"What is the SDLC and why do we actually need it?",
 	]
 	sentence_groups = group_by_meaning(sentence_examples)
-	print(sentence_groups)
+	for group in sentence_groups:
+		for sentence in group:
+			print(sentence)
+		print("---")
 	app.run()
